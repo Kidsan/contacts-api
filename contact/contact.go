@@ -15,12 +15,3 @@ func Init() chi.Router {
 
 	return router
 }
-
-// func (c *ContactsHandler) Get(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte(strings.Join(c.data, ",")))
-// }
-
-// func (c *ContactsHandler) Post(w http.ResponseWriter, r *http.Request) {
-// 	c.data = append(c.data, c.data[0]+"a")
-// 	w.Write([]byte(c.data[len(c.data)-1]))
-// }

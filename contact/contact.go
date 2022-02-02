@@ -7,11 +7,11 @@ import (
 	"github.com/kidsan/contacts-api/contact/ports"
 )
 
-func Init() chi.Router {
-	a := &adapters.ContactHandler{}
-	b := domain.NewContactService(a)
-	c := ports.NewContactRouter(b)
-	router := c.GetRouter()
+func BuildRouter() chi.Router {
+	contactRepository := &adapters.ContactHandler{}
+	contactService := domain.NewContactService(contactRepository)
+	contactHTTP := ports.NewContactRouter(contactService)
+	router := contactHTTP.GetRouter()
 
 	return router
 }

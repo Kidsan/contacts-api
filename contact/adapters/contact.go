@@ -1,14 +1,27 @@
 package adapters
 
-type ContactHandler struct {
-	data []string
+import (
+	uuid "github.com/google/uuid"
+)
+
+type Contact struct {
+	name string
+	id   uuid.UUID
 }
 
-func (c *ContactHandler) Get() []string {
+type ContactHandler struct {
+	data []Contact
+}
+
+func (c *ContactHandler) Get() []Contact {
 	return c.data
 }
 
-func (c *ContactHandler) Save(s string) string {
-	c.data = append(c.data, s)
-	return c.data[len(c.data)-1]
+func (c *ContactHandler) Save(s string) Contact {
+	newContact := Contact{
+		id:   uuid.New(),
+		name: s,
+	}
+	c.data = append(c.data, newContact)
+	return newContact
 }

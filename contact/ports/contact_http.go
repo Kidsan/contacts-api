@@ -2,15 +2,15 @@ package ports
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/kidsan/contacts-api/contact/adapters"
 	"go.uber.org/zap"
 )
 
 type ContactService interface {
-	Get() []string
-	Save(string) string
+	Get() []adapters.Contact
+	Save(string) adapters.Contact
 }
 
 type ContactHTTP struct {
@@ -35,11 +35,11 @@ func (c *ContactHTTP) GetRouter() chi.Router {
 
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
 	c.logger.Info("Listing all contects")
-	w.Write([]byte(strings.Join(c.service.Get(), ","))) // send json
+	//w.Write([]byte(strings.Join(c.service.Get(), ","))) // send json
 }
 
 func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
 	c.logger.Info("Creating new contact")
 	c.service.Save("POST") // marshall body and save, generate id
-	w.Write([]byte(strings.Join(c.service.Get(), ",")))
+	//w.Write([]byte(strings.Join(c.service.Get(), ",")))
 }

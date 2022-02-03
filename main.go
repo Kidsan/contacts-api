@@ -11,7 +11,7 @@ import (
 func main() {
 	logger := logger.NewLogger()
 	r := chi.NewRouter()
-	contactRoutes := contact.BuildRouter()
+	contactRoutes := contact.BuildRouter(logger)
 	r.Mount("/contacts", contactRoutes)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("."))

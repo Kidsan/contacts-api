@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"go.uber.org/zap"
 )
 
 type ContactService interface {
@@ -13,11 +14,13 @@ type ContactService interface {
 }
 
 type ContactHTTP struct {
+	logger  *zap.Logger
 	service ContactService
 }
 
-func NewContactRouter(s ContactService) *ContactHTTP {
+func NewContactRouter(logger *zap.Logger, s ContactService) *ContactHTTP {
 	return &ContactHTTP{
+		logger:  logger,
 		service: s,
 	}
 }
@@ -31,10 +34,12 @@ func (c *ContactHTTP) GetRouter() chi.Router {
 }
 
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(strings.Join(c.service.Get(), ",")))
+	c.logger.Info("Listing all contects")
+	w.Write([]byte(strings.Join(c.service.Get(), ","))) // send json
 }
 
 func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
-	c.service.Save("POST")
+	c.logger.Info("Creating new contact")
+	c.service.Save("POST") // marshall body and save, generate id
 	w.Write([]byte(strings.Join(c.service.Get(), ",")))
 }

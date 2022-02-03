@@ -5,12 +5,13 @@ import (
 	"github.com/kidsan/contacts-api/contact/adapters"
 	"github.com/kidsan/contacts-api/contact/domain"
 	"github.com/kidsan/contacts-api/contact/ports"
+	"go.uber.org/zap"
 )
 
-func BuildRouter() chi.Router {
+func BuildRouter(logger *zap.Logger) chi.Router {
 	contactRepository := &adapters.ContactHandler{}
 	contactService := domain.NewContactService(contactRepository)
-	contactHTTP := ports.NewContactRouter(contactService)
+	contactHTTP := ports.NewContactRouter(logger, contactService)
 	router := contactHTTP.GetRouter()
 
 	return router

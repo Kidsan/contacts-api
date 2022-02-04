@@ -2,6 +2,7 @@ package ports
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -12,7 +13,7 @@ import (
 
 type ContactService interface {
 	Get() []adapters.Contact
-	Save(string) adapters.Contact
+	Save(Contact) adapters.Contact
 }
 
 type ContactHTTP struct {
@@ -59,6 +60,15 @@ func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
 
 func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
 	c.logger.Info("Creating new contact")
-	c.service.Save("POST") // marshall body and save, generate id
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return
+	}
+	var newContact Contact
+	err = json.Unmarshal(body, &newContact)
+	if err != nil {
+		return
+	}
+	c.service.Save(newContact) // marshall body and save, generate id
 	//w.Write([]byte(strings.Join(c.service.Get(), ",")))
 }

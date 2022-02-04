@@ -19,16 +19,16 @@ func TestContactHandler_Get(t *testing.T) {
 			name: "basic test",
 			fields: fields{data: []Contact{
 				{
-					name: "a",
-					id:   uuid.New(),
+					Name: "a",
+					ID:   uuid.New(),
 				},
 				{
-					name: "b",
-					id:   uuid.New(),
+					Name: "b",
+					ID:   uuid.New(),
 				},
 				{
-					name: "c",
-					id:   uuid.New(),
+					Name: "c",
+					ID:   uuid.New(),
 				},
 			}},
 			want: []string{"a", "b", "c"},
@@ -42,7 +42,7 @@ func TestContactHandler_Get(t *testing.T) {
 			got := c.Get()
 
 			for i, v := range got {
-				if v.name != tt.want[i] {
+				if v.Name != tt.want[i] {
 					t.Errorf("ContactHandler.Get() = %v, want %v", got, tt.want)
 				}
 			}

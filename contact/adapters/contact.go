@@ -17,10 +17,10 @@ func (c *ContactHandler) Get() []Contact {
 	return c.data
 }
 
-func (c *ContactHandler) Save(s string) Contact {
+func (c *ContactHandler) Save(s Contact) Contact {
 	newContact := Contact{
 		ID:   uuid.New(),
-		Name: s,
+		Name: s.Name,
 	}
 	c.data = append(c.data, newContact)
 	return newContact

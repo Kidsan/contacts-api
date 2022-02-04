@@ -5,8 +5,8 @@ import (
 )
 
 type Contact struct {
-	name string
-	id   uuid.UUID
+	Name string
+	ID   uuid.UUID
 }
 
 type ContactHandler struct {
@@ -19,8 +19,8 @@ func (c *ContactHandler) Get() []Contact {
 
 func (c *ContactHandler) Save(s string) Contact {
 	newContact := Contact{
-		id:   uuid.New(),
-		name: s,
+		ID:   uuid.New(),
+		Name: s,
 	}
 	c.data = append(c.data, newContact)
 	return newContact

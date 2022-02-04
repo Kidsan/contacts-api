@@ -41,7 +41,7 @@ func (c *ContactHTTP) GetRouter() chi.Router {
 }
 
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
-	c.logger.Info("Listing all contects")
+	c.logger.Info("Listing all contacts")
 	contacts := c.service.Get()
 	var allContacts []Contact
 	for _, v := range contacts {

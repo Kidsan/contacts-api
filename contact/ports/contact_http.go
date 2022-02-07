@@ -13,7 +13,7 @@ import (
 
 type ContactService interface {
 	Get() []adapters.Contact
-	Save(Contact) adapters.Contact
+	Save(Contact) Contact
 }
 
 type ContactHTTP struct {
@@ -69,6 +69,7 @@ func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	c.service.Save(newContact) // marshall body and save, generate id
-	//w.Write([]byte(strings.Join(c.service.Get(), ",")))
+	res := c.service.Save(newContact) // marshall body and save, generate id
+	result, _ := json.Marshal(res)
+	w.Write([]byte(result))
 }

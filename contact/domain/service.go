@@ -24,8 +24,12 @@ func (cs *ContactService) Get() []adapters.Contact {
 	return cs.repository.Get()
 }
 
-func (cs *ContactService) Save(s ports.Contact) adapters.Contact {
-	return cs.repository.Save(adapters.Contact{
+func (cs *ContactService) Save(s ports.Contact) ports.Contact {
+	result := cs.repository.Save(adapters.Contact{
 		Name: s.Name,
 	})
+	return ports.Contact{
+		ID:   result.ID,
+		Name: result.Name,
+	}
 }

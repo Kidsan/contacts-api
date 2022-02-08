@@ -1,34 +1,28 @@
 package domain
 
 import (
-	"github.com/kidsan/contacts-api/contact/adapters"
-	"github.com/kidsan/contacts-api/contact/ports"
+	contactsapi "github.com/kidsan/contacts-api"
 )
 
-type ContactRepository interface {
-	Get() []adapters.Contact
-	Save(adapters.Contact) adapters.Contact
-}
-
 type ContactService struct {
-	repository ContactRepository
+	repository contactsapi.ContactRepository
 }
 
-func NewContactService(cr ContactRepository) *ContactService {
+func NewContactService(cr contactsapi.ContactRepository) *ContactService {
 	return &ContactService{
 		repository: cr,
 	}
 }
 
-func (cs *ContactService) Get() []adapters.Contact {
+func (cs *ContactService) Get() []contactsapi.Contact {
 	return cs.repository.Get()
 }
 
-func (cs *ContactService) Save(s ports.Contact) ports.Contact {
-	result := cs.repository.Save(adapters.Contact{
+func (cs *ContactService) Save(s contactsapi.Contact) contactsapi.Contact {
+	result := cs.repository.Save(contactsapi.Contact{
 		Name: s.Name,
 	})
-	return ports.Contact{
+	return contactsapi.Contact{
 		ID:   result.ID,
 		Name: result.Name,
 	}

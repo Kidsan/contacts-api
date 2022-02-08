@@ -6,27 +6,16 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
-	"github.com/kidsan/contacts-api/contact/adapters"
+	contactsapi "github.com/kidsan/contacts-api"
 	"go.uber.org/zap"
 )
 
-type ContactService interface {
-	Get() []adapters.Contact
-	Save(Contact) Contact
-}
-
 type ContactHTTP struct {
 	logger  *zap.Logger
-	service ContactService
+	service contactsapi.ContactService
 }
 
-type Contact struct {
-	Name string    `json:"name"`
-	ID   uuid.UUID `json:"id"`
-}
-
-func NewContactRouter(logger *zap.Logger, s ContactService) *ContactHTTP {
+func NewContactRouter(logger *zap.Logger, s contactsapi.ContactService) *ContactHTTP {
 	return &ContactHTTP{
 		logger:  logger,
 		service: s,
@@ -44,9 +33,9 @@ func (c *ContactHTTP) GetRouter() chi.Router {
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
 	c.logger.Info("Listing all contacts")
 	contacts := c.service.Get()
-	var allContacts []Contact
+	var allContacts []contactsapi.Contact
 	for _, v := range contacts {
-		allContacts = append(allContacts, Contact{
+		allContacts = append(allContacts, contactsapi.Contact{
 			Name: v.Name,
 			ID:   v.ID,
 		})
@@ -64,12 +53,12 @@ func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	var newContact Contact
+	var newContact contactsapi.Contact
 	err = json.Unmarshal(body, &newContact)
 	if err != nil {
 		return
 	}
-	res := c.service.Save(newContact) // marshall body and save, generate id
+	res := c.service.Save(newContact)
 	result, _ := json.Marshal(res)
 	w.Write([]byte(result))
 }

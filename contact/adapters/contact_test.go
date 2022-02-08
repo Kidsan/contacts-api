@@ -4,11 +4,12 @@ import (
 	"testing"
 
 	uuid "github.com/google/uuid"
+	contactsapi "github.com/kidsan/contacts-api"
 )
 
 func TestContactHandler_Get(t *testing.T) {
 	type fields struct {
-		data []Contact
+		data []contactsapi.Contact
 	}
 	tests := []struct {
 		name   string
@@ -17,7 +18,7 @@ func TestContactHandler_Get(t *testing.T) {
 	}{
 		{
 			name: "basic test",
-			fields: fields{data: []Contact{
+			fields: fields{data: []contactsapi.Contact{
 				{
 					Name: "a",
 					ID:   uuid.New(),
@@ -43,7 +44,7 @@ func TestContactHandler_Get(t *testing.T) {
 
 			for i, v := range got {
 				if v.Name != tt.want[i] {
-					t.Errorf("ContactHandler.Get() = %v, want %v", got, tt.want)
+					t.Errorf("contactsapi.ContactHandler.Get() = %v, want %v", got, tt.want)
 				}
 			}
 		})

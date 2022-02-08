@@ -2,23 +2,19 @@ package adapters
 
 import (
 	uuid "github.com/google/uuid"
+	contactsapi "github.com/kidsan/contacts-api"
 )
 
-type Contact struct {
-	Name string
-	ID   uuid.UUID
-}
-
 type ContactHandler struct {
-	data []Contact
+	data []contactsapi.Contact
 }
 
-func (c *ContactHandler) Get() []Contact {
+func (c *ContactHandler) Get() []contactsapi.Contact {
 	return c.data
 }
 
-func (c *ContactHandler) Save(s Contact) Contact {
-	newContact := Contact{
+func (c *ContactHandler) Save(s contactsapi.Contact) contactsapi.Contact {
+	newContact := contactsapi.Contact{
 		ID:   uuid.New(),
 		Name: s.Name,
 	}

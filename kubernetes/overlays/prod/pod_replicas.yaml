@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-api
+  namespace: contacts
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: contacts-api

@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"context"
 	"testing"
 
 	uuid "github.com/google/uuid"
@@ -40,7 +41,8 @@ func TestContactHandler_Get(t *testing.T) {
 			c := &ContactHandler{
 				data: tt.fields.data,
 			}
-			got := c.Get()
+			ctx := context.Background()
+			got, _ := c.Get(ctx)
 
 			for i, v := range got {
 				if v.Name != tt.want[i] {

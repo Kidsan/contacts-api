@@ -1,6 +1,10 @@
 package contactsapi
 
-import "github.com/google/uuid"
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
 
 type Contact struct {
 	Name string    `json:"name"`
@@ -8,11 +12,11 @@ type Contact struct {
 }
 
 type ContactRepository interface {
-	Get() []Contact
-	Save(Contact) Contact
+	Get(context.Context) ([]Contact, error)
+	Save(context.Context, Contact) (Contact, error)
 }
 
 type ContactService interface {
-	Get() []Contact
-	Save(Contact) Contact
+	Get(context.Context) ([]Contact, error)
+	Save(context.Context, Contact) (Contact, error)
 }

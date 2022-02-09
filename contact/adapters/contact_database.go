@@ -19,7 +19,7 @@ func (c *ContactDatabase) Get(ctx context.Context) ([]contactsapi.Contact, error
 
 	tx := c.connection.WithContext(ctx).Raw(sqlQuery).Scan(&contacts)
 	if tx.Error != nil {
-		return nil, fmt.Errorf("adapters: could not list all contacts: %w", tx.Error)
+		return nil, fmt.Errorf("adapters(contact-database): could not list all contacts: %w", tx.Error)
 	}
 
 	return contacts, nil

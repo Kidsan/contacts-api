@@ -32,7 +32,10 @@ func (c *ContactHTTP) GetRouter() chi.Router {
 
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {
 	c.logger.Info("Listing all contacts")
-	contacts, _ := c.service.Get(r.Context())
+	contacts, err := c.service.Get(r.Context())
+	if err != nil {
+		return
+	}
 	var allContacts []contactsapi.Contact
 	for _, v := range contacts {
 		allContacts = append(allContacts, contactsapi.Contact{
@@ -58,7 +61,13 @@ func (c *ContactHTTP) Save(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	res, _ := c.service.Save(r.Context(), newContact)
-	result, _ := json.Marshal(res)
+	res, err := c.service.Save(r.Context(), newContact)
+	if err != nil {
+		return
+	}
+	result, err := json.Marshal(res)
+	if err != nil {
+		return
+	}
 	w.Write([]byte(result))
 }

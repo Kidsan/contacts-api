@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	contactsapi "github.com/kidsan/contacts-api"
 	"go.uber.org/zap"
 )
@@ -20,14 +19,6 @@ func NewContactRouter(logger *zap.Logger, s contactsapi.ContactService) *Contact
 		logger:  logger,
 		service: s,
 	}
-}
-
-func (c *ContactHTTP) GetRouter() chi.Router {
-	r := chi.NewRouter()
-
-	r.Get("/", c.List)
-	r.Post("/", c.Save)
-	return r
 }
 
 func (c *ContactHTTP) List(w http.ResponseWriter, r *http.Request) {

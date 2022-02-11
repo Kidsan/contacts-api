@@ -16,10 +16,7 @@ func (c *ContactHandler) Get(ctx context.Context) ([]contactsapi.Contact, error)
 }
 
 func (c *ContactHandler) Save(ctx context.Context, s contactsapi.Contact) (contactsapi.Contact, error) {
-	newContact := contactsapi.Contact{
-		ID:   uuid.New(),
-		Name: s.Name,
-	}
-	c.data = append(c.data, newContact)
-	return newContact, nil
+	s.ID = uuid.New()
+	c.data = append(c.data, s)
+	return s, nil
 }

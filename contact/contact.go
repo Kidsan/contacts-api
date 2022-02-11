@@ -8,11 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
-func BuildRouter(logger *zap.Logger) chi.Router {
+func RegisterContactRoutes(logger *zap.Logger, r *chi.Mux) {
 	contactRepository := &adapters.ContactHandler{}
 	contactService := domain.NewContactService(contactRepository)
 	contactHTTP := ports.NewContactRouter(logger, contactService)
-	router := contactHTTP.GetRouter()
 
-	return router
+	r.Get("/contacts", contactHTTP.List)
+	r.Post("/contacts", contactHTTP.Save)
 }

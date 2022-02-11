@@ -13,6 +13,12 @@ type ContactDatabase struct {
 	connection *gorm.DB
 }
 
+func NewRouteRepository(connection *gorm.DB, metricsNamespace string) *ContactDatabase {
+	return &ContactDatabase{
+		connection: connection,
+	}
+}
+
 func (c *ContactDatabase) Get(ctx context.Context) ([]contactsapi.Contact, error) {
 	contacts := make([]contactsapi.Contact, 0)
 	sqlQuery := "select * from contacts"

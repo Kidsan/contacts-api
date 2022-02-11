@@ -13,6 +13,6 @@ func RegisterContactRoutes(logger *zap.Logger, r *chi.Mux) {
 	contactService := domain.NewContactService(contactRepository)
 	contactHTTP := ports.NewContactRouter(logger, contactService)
 
-	r.Get("/contacts", contactHTTP.List)
-	r.Post("/contacts", contactHTTP.Save)
+	r.Get("/contacts", contactHTTP.GetAllHandler())
+	r.Post("/contacts", contactHTTP.PostHandler())
 }

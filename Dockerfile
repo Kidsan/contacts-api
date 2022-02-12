@@ -7,6 +7,6 @@ FROM gcr.io/distroless/static as release
 WORKDIR /usr/app
 COPY --from=0 /usr/app/contacts-api .
 USER nonroot
-CMD ["./contacts-api"]
+CMD ["./contactsapi"]
 
 FROM release

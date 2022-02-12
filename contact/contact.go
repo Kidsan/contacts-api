@@ -15,4 +15,5 @@ func RegisterContactRoutes(logger *zap.Logger, r *chi.Mux) {
 
 	r.Get("/contacts", contactHTTP.GetAllHandler())
 	r.Post("/contacts", contactHTTP.PostHandler())
+	// maybe return a http handler that server package can mount?
 }

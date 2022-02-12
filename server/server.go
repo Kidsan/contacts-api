@@ -17,6 +17,7 @@ type Server struct {
 func NewServer(config contactsapi.Config, logger *zap.Logger) *Server {
 	r := chi.NewRouter()
 	contact.RegisterContactRoutes(logger, r)
+
 	return &Server{
 		logger: logger,
 		router: r,

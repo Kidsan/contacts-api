@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Read(prefix string) (contactsapi.Config, error) {
+func Read() (contactsapi.Config, error) {
 	viper.AddConfigPath(".")
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")

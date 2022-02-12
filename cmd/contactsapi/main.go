@@ -10,7 +10,7 @@ import (
 
 func main() {
 	logger := logger.NewLogger()
-	config, err := config.Read("")
+	config, err := config.Read()
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -12,6 +13,7 @@ import (
 type Server struct {
 	logger *zap.Logger
 	router *chi.Mux
+	config contactsapi.ServerConfig
 }
 
 func NewServer(config contactsapi.Config, logger *zap.Logger) *Server {
@@ -19,12 +21,13 @@ func NewServer(config contactsapi.Config, logger *zap.Logger) *Server {
 	contact.RegisterContactRoutes(logger, r)
 
 	return &Server{
+		config: config.Server,
 		logger: logger,
 		router: r,
 	}
 }
 
 func (s *Server) Start() {
-	s.logger.Info("Application listening on port 3000")
-	http.ListenAndServe(":3000", s.router)
+	s.logger.Info(fmt.Sprintf("Application listening on port %d", s.config.Port))
+	http.ListenAndServe(fmt.Sprintf(":%d", s.config.Port), s.router)
 }

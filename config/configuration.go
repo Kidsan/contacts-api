@@ -11,7 +11,6 @@ func Read() (contactsapi.Config, error) {
 	viper.AddConfigPath(".")
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
-
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

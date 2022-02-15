@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	contactsapi "github.com/kidsan/contacts-api"
 	"gorm.io/gorm"
 )
@@ -35,4 +36,20 @@ func (c *ContactRepository) Save(ctx context.Context, newContact contactsapi.Con
 	}
 
 	return newContact, nil
+}
+
+func (c *ContactRepository) Find(ctx context.Context, id string) (contactsapi.Contact, error) {
+	var result contactsapi.Contact
+	sqlQuery := "select * from contacts where id = ?;"
+
+	tx := c.connection.WithContext(ctx).Raw(sqlQuery, id).Scan(&result)
+	if tx.Error != nil {
+		return contactsapi.Contact{}, fmt.Errorf("adapters: could not find specific contact with id %v: %w", id, tx.Error)
+	}
+
+	if result.ID == uuid.Nil {
+		return contactsapi.Contact{}, nil
+	}
+
+	return result, nil
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 	contactsapi "github.com/kidsan/contacts-api"
 	"go.uber.org/zap"
 )
@@ -27,6 +28,7 @@ func (c *ContactHTTP) Init() func(router chi.Router) {
 	return func(router chi.Router) {
 		router.Get("/", c.GetAllHandler())
 		router.Post("/", c.PostHandler())
+		router.With(c.checkIDParam()).Get("/{id}", c.FindHandler())
 	}
 }
 
@@ -79,5 +81,43 @@ func (c *ContactHTTP) PostHandler() http.HandlerFunc {
 			return
 		}
 		w.Write([]byte(result))
+	}
+}
+
+func (c *ContactHTTP) FindHandler() http.HandlerFunc {
+	const msg = "cannot get route"
+
+	return func(w http.ResponseWriter, req *http.Request) {
+		id := chi.URLParam(req, "id")
+		contact, err := c.service.Find(req.Context(), id)
+		if err != nil {
+			c.logger.Error(err.Error())
+			http.Error(w, msg, http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+
+		if err := json.NewEncoder(w).Encode(&contact); err != nil {
+			c.logger.Error(fmt.Sprintf("ports: %v", err.Error()))
+			http.Error(w, msg, http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func (c *ContactHTTP) checkIDParam() func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			id := chi.URLParam(req, "id")
+			_, err := uuid.Parse(id)
+			if err != nil {
+				msg := "cannot parse route id"
+				http.Error(w, msg, http.StatusBadRequest)
+				return
+			}
+
+			next.ServeHTTP(w, req)
+		})
 	}
 }

@@ -34,3 +34,11 @@ func (cs *ContactService) Save(ctx context.Context, newContact contactsapi.Conta
 	}
 	return result, nil
 }
+
+func (cs *ContactService) Find(ctx context.Context, id string) (contactsapi.Contact, error) {
+	result, err := cs.repository.Find(ctx, id)
+	if err != nil {
+		return contactsapi.Contact{}, fmt.Errorf("domain(contact-service): could find contact %w", err)
+	}
+	return result, nil
+}

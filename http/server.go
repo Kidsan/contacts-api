@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	contactsapi "github.com/kidsan/contacts-api"
-	"github.com/kidsan/contacts-api/contact"
 	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,9 +13,10 @@ import (
 )
 
 type Server struct {
-	logger *zap.Logger
-	router *chi.Mux
-	config contactsapi.ServerConfig
+	logger     *zap.Logger
+	router     *chi.Mux
+	connection *gorm.DB
+	config     contactsapi.ServerConfig
 }
 
 func NewServer(config contactsapi.Config, logger *zap.Logger) *Server {
@@ -27,7 +27,9 @@ func NewServer(config contactsapi.Config, logger *zap.Logger) *Server {
 		router: r,
 	}
 	connection, _ := s.openDBConnection(config.Database.DSN(), config.Database.Database)
-	contact.RegisterContactRoutes(logger, r, connection)
+	s.connection = connection
+
+	s.router.Route("/api/contacts", s.BuildContactRouter())
 
 	return &Server{
 		config: config.Server,

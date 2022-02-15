@@ -4,7 +4,7 @@ services:
   database:
     image: postgres:13
     environment:
-      POSTGRES_DB: "contactsapi"
+      POSTGRES_DB: "contacts_api"
       POSTGRES_USER: "contactsapi"
       POSTGRES_PASSWORD: "contactsapi"
     ports:

@@ -19,7 +19,7 @@ func NewContactRepository(connection *gorm.DB) *ContactRepository {
 
 func (c *ContactRepository) Get(ctx context.Context) ([]contactsapi.Contact, error) {
 	result := make([]contactsapi.Contact, 0)
-	sqlQuery := "select * from contacts;"
+	sqlQuery := "select * from contacts_api.contacts;"
 
 	tx := c.connection.WithContext(ctx).Raw(sqlQuery).Scan(&result)
 	if tx.Error != nil {

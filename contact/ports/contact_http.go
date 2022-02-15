@@ -2,6 +2,7 @@ package ports
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -26,6 +27,7 @@ func (c *ContactHTTP) GetAllHandler() http.HandlerFunc {
 		c.logger.Info("Listing all contacts")
 		contacts, err := c.service.Get(r.Context())
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not list all contacts: %v", err))
 			return
 		}
 		var allContacts []contactsapi.Contact
@@ -37,6 +39,7 @@ func (c *ContactHTTP) GetAllHandler() http.HandlerFunc {
 		}
 		result, err := json.Marshal(allContacts)
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not list all contacts: %v", err))
 			return
 		}
 		w.Write(result)
@@ -48,19 +51,23 @@ func (c *ContactHTTP) PostHandler() http.HandlerFunc {
 		c.logger.Info("Creating new contact")
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not create contact: %v", err))
 			return
 		}
 		var newContact contactsapi.Contact
 		err = json.Unmarshal(body, &newContact)
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not create contact: %v", err))
 			return
 		}
 		res, err := c.service.Save(r.Context(), newContact)
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not create contact: %v", err))
 			return
 		}
 		result, err := json.Marshal(res)
 		if err != nil {
+			c.logger.Error(fmt.Sprintf("ports(contact): could not create contact: %v", err))
 			return
 		}
 		w.Write([]byte(result))

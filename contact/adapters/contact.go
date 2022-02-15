@@ -3,7 +3,6 @@ package adapters
 import (
 	"context"
 
-	uuid "github.com/google/uuid"
 	contactsapi "github.com/kidsan/contacts-api"
 )
 
@@ -16,7 +15,6 @@ func (c *ContactHandler) Get(ctx context.Context) ([]contactsapi.Contact, error)
 }
 
 func (c *ContactHandler) Save(ctx context.Context, s contactsapi.Contact) (contactsapi.Contact, error) {
-	s.ID = uuid.New()
 	c.data = append(c.data, s)
 	return s, nil
 }

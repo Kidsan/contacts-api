@@ -21,6 +21,7 @@ type DatabaseConfig struct {
 	Schema          string `mapstructure:"DATABASE_SCHEMA"`
 	ApplicationName string `mapstructure:"DATABASE_APP_NAME"`
 	MigrationPath   string `mapstructure:"DATABASE_MIGRATION_PATH"`
+	Driver          string `mapstructure:"DATABASE_DRIVER"`
 }
 
 func (d *DatabaseConfig) DSN() string {

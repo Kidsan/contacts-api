@@ -9,33 +9,32 @@ import (
 	"gorm.io/gorm"
 )
 
-type ContactDatabase struct {
+type ContactRepository struct {
 	connection *gorm.DB
 }
 
-func NewRouteRepository(connection *gorm.DB, metricsNamespace string) *ContactDatabase {
-	return &ContactDatabase{
-		connection: connection,
-	}
+func NewContactRepository(connection *gorm.DB) *ContactRepository {
+	return &ContactRepository{connection: connection}
 }
 
-func (c *ContactDatabase) Get(ctx context.Context) ([]contactsapi.Contact, error) {
-	contacts := make([]contactsapi.Contact, 0)
-	sqlQuery := "select * from contacts"
+func (c *ContactRepository) Get(ctx context.Context) ([]contactsapi.Contact, error) {
+	result := make([]contactsapi.Contact, 0)
+	sqlQuery := "select * from contacts;"
 
-	tx := c.connection.WithContext(ctx).Raw(sqlQuery).Scan(&contacts)
+	tx := c.connection.WithContext(ctx).Raw(sqlQuery).Scan(&result)
 	if tx.Error != nil {
-		return nil, fmt.Errorf("adapters(contact-database): could not list all contacts: %w", tx.Error)
+		return nil, fmt.Errorf("adapters: could not list all contacts: %w", tx.Error)
 	}
 
-	return contacts, nil
+	return result, nil
 }
 
-func (c *ContactDatabase) Save(ctx context.Context, s contactsapi.Contact) (contactsapi.Contact, error) {
-	newContact := contactsapi.Contact{
-		ID:   uuid.New(),
-		Name: s.Name,
+func (c *ContactRepository) Save(ctx context.Context, newContact contactsapi.Contact) (contactsapi.Contact, error) {
+	newContact.ID = uuid.New()
+	tx := c.connection.WithContext(ctx).Create(&newContact)
+	if tx.Error != nil {
+		return contactsapi.Contact{}, fmt.Errorf("adapters: could not create new contact: %w", tx.Error)
 	}
-	// c.data = append(c.data, newContact)
+
 	return newContact, nil
 }

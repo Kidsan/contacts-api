@@ -5,16 +5,10 @@ import (
 
 	uuid "github.com/google/uuid"
 	contactsapi "github.com/kidsan/contacts-api"
-	"gorm.io/gorm"
 )
 
 type ContactHandler struct {
-	data       []contactsapi.Contact
-	connection *gorm.DB
-}
-
-func NewContactRepository(connection *gorm.DB) *ContactHandler {
-	return &ContactHandler{connection: connection}
+	data []contactsapi.Contact
 }
 
 func (c *ContactHandler) Get(ctx context.Context) ([]contactsapi.Contact, error) {

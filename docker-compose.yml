@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: "contactsapi"
+      POSTGRES_USER: "contactsapi"
+      POSTGRES_PASSWORD: "contactsapi"
+    ports:
+      - 5432:5432

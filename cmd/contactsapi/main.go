@@ -5,9 +5,9 @@ import (
 
 	contactsapi "github.com/kidsan/contacts-api"
 	"github.com/kidsan/contacts-api/config"
+	"github.com/kidsan/contacts-api/http"
 	"github.com/kidsan/contacts-api/logger"
 	"github.com/kidsan/contacts-api/migration"
-	"github.com/kidsan/contacts-api/server"
 )
 
 func main() {
@@ -21,8 +21,7 @@ func main() {
 		panic(err)
 	}
 
-	server := server.NewServer(config, logger)
-
+	server := http.NewServer(config, logger)
 	server.Start()
 }
 

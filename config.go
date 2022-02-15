@@ -14,7 +14,6 @@ type ServerConfig struct {
 type DatabaseConfig struct {
 	Database        string `mapstructure:"DATABASE_DATABASE"`
 	Host            string `mapstructure:"DATABASE_HOST"`
-	Port            int    `mapstructure:"DATABASE_PORT"`
 	User            string `mapstructure:"DATABASE_USER"`
 	Password        string `mapstructure:"DATABASE_PASS"`
 	DBName          string `mapstructure:"DATABASE_NAME"`
@@ -22,6 +21,7 @@ type DatabaseConfig struct {
 	ApplicationName string `mapstructure:"DATABASE_APP_NAME"`
 	MigrationPath   string `mapstructure:"DATABASE_MIGRATION_PATH"`
 	Driver          string `mapstructure:"DATABASE_DRIVER"`
+	Port            int    `mapstructure:"DATABASE_PORT"`
 }
 
 func (d *DatabaseConfig) DSN() string {

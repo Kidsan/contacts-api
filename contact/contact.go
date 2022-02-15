@@ -6,10 +6,11 @@ import (
 	"github.com/kidsan/contacts-api/contact/domain"
 	"github.com/kidsan/contacts-api/contact/ports"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
-func RegisterContactRoutes(logger *zap.Logger, r *chi.Mux) {
-	contactRepository := &adapters.ContactHandler{}
+func RegisterContactRoutes(logger *zap.Logger, r *chi.Mux, connection *gorm.DB) {
+	contactRepository := adapters.NewContactRepository(connection)
 	contactService := domain.NewContactService(contactRepository)
 	contactHTTP := ports.NewContactRouter(logger, contactService)
 

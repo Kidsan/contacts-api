@@ -11,7 +11,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 )
 
 type Server struct {
@@ -45,22 +44,11 @@ func (s *Server) Start() {
 func (s *Server) openDBConnection(dsn, databaseName string) (*gorm.DB, error) {
 	connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
-		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   "contacts_api.",
-			SingularTable: false,
-			NameReplacer:  nil,
-			NoLowerCase:   false,
-		},
 	})
 
 	if err != nil {
 		return nil, fmt.Errorf("api: could not open database: %w", err)
 	}
-
-	// db, err := connection.DB()
-	// if err != nil {
-	// 	return nil, fmt.Errorf("api: could not get database: %w", err)
-	// }
 
 	return connection, nil
 }

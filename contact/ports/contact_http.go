@@ -1,6 +1,7 @@
 package ports
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -12,12 +13,18 @@ import (
 	"go.uber.org/zap"
 )
 
-type ContactHTTP struct {
-	logger  *zap.Logger
-	service contactsapi.ContactService
+type ContactService interface {
+	Get(context.Context) ([]contactsapi.Contact, error)
+	Save(context.Context, contactsapi.Contact) (contactsapi.Contact, error)
+	Find(context.Context, string) (contactsapi.Contact, error)
 }
 
-func NewContactRouter(logger *zap.Logger, s contactsapi.ContactService) *ContactHTTP {
+type ContactHTTP struct {
+	logger  *zap.Logger
+	service ContactService
+}
+
+func NewContactRouter(logger *zap.Logger, s ContactService) *ContactHTTP {
 	return &ContactHTTP{
 		logger:  logger,
 		service: s,

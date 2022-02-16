@@ -9,10 +9,16 @@ import (
 )
 
 type ContactService struct {
-	repository contactsapi.ContactRepository
+	repository ContactRepository
 }
 
-func NewContactService(cr contactsapi.ContactRepository) *ContactService {
+type ContactRepository interface {
+	Get(context.Context) ([]contactsapi.Contact, error)
+	Save(context.Context, contactsapi.Contact) (contactsapi.Contact, error)
+	Find(context.Context, string) (contactsapi.Contact, error)
+}
+
+func NewContactService(cr ContactRepository) *ContactService {
 	return &ContactService{
 		repository: cr,
 	}

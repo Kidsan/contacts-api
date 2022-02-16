@@ -11,7 +11,7 @@ import (
 
 func TestContactService_Get(t *testing.T) {
 	type fields struct {
-		repository contactsapi.ContactRepository
+		repository ContactRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -64,7 +64,7 @@ func TestContactService_Get(t *testing.T) {
 
 func TestContactService_Save(t *testing.T) {
 	type fields struct {
-		repository contactsapi.ContactRepository
+		repository ContactRepository
 	}
 	type args struct {
 		ctx        context.Context

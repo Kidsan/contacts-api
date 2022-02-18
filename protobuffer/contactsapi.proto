@@ -1,0 +1,40 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option go_package = "github.com/kidsan/contacts-api/protobuffer";
+
+package protobuffer;
+
+// The Contact service definition.
+service Contacts {
+  rpc Get (ContactId) returns (ContactListReply) {}
+  rpc Save(ContactRequest) returns (ContactReply) {}
+  rpc Find(ContactId) returns (ContactReply) {}
+}
+
+message ContactRequest {
+  string name = 1;
+}
+message ContactReply {
+  string name = 1;
+  string id = 2;
+}
+message ContactId {
+  string id = 1;
+}
+message ContactListReply {
+  repeated ContactReply contacts = 1;
+}

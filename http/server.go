@@ -43,7 +43,7 @@ func NewHTTPServer(config contactsapi.Config, logger *zap.Logger, connection *go
 }
 
 func (s *HTTPServer) Start() {
-	s.logger.Info(fmt.Sprintf("Application listening on port %d", s.config.Port))
+	s.logger.Info(fmt.Sprintf("HTTP Application listening on port %d", s.config.Port))
 	http.ListenAndServe(fmt.Sprintf(":%d", s.config.Port), s.router)
 }
 
@@ -59,7 +59,7 @@ func NewGRPCServer(config contactsapi.Config, logger *zap.Logger, connection *go
 }
 
 func (s *GRPCServer) Start() {
-	s.logger.Info(fmt.Sprintf("Application listening on port %d", s.config.Port))
+	s.logger.Info(fmt.Sprintf("GRPC Application listening on port %d", s.config.Port))
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", s.config.Port))
 	if err != nil {
 		s.logger.Sugar().Fatalf("failed to listen: %v", err)

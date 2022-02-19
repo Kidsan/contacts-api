@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContactsClient interface {
-	Get(ctx context.Context, in *ContactRequest, opts ...grpc.CallOption) (*ContactListReply, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*ContactListReply, error)
 	Save(ctx context.Context, in *ContactRequest, opts ...grpc.CallOption) (*ContactReply, error)
 	Find(ctx context.Context, in *ContactId, opts ...grpc.CallOption) (*ContactReply, error)
 }
@@ -31,7 +31,7 @@ func NewContactsClient(cc grpc.ClientConnInterface) ContactsClient {
 	return &contactsClient{cc}
 }
 
-func (c *contactsClient) Get(ctx context.Context, in *ContactRequest, opts ...grpc.CallOption) (*ContactListReply, error) {
+func (c *contactsClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*ContactListReply, error) {
 	out := new(ContactListReply)
 	err := c.cc.Invoke(ctx, "/protobuffer.Contacts/Get", in, out, opts...)
 	if err != nil {
@@ -62,7 +62,7 @@ func (c *contactsClient) Find(ctx context.Context, in *ContactId, opts ...grpc.C
 // All implementations must embed UnimplementedContactsServer
 // for forward compatibility
 type ContactsServer interface {
-	Get(context.Context, *ContactRequest) (*ContactListReply, error)
+	Get(context.Context, *GetRequest) (*ContactListReply, error)
 	Save(context.Context, *ContactRequest) (*ContactReply, error)
 	Find(context.Context, *ContactId) (*ContactReply, error)
 	mustEmbedUnimplementedContactsServer()
@@ -72,7 +72,7 @@ type ContactsServer interface {
 type UnimplementedContactsServer struct {
 }
 
-func (UnimplementedContactsServer) Get(context.Context, *ContactRequest) (*ContactListReply, error) {
+func (UnimplementedContactsServer) Get(context.Context, *GetRequest) (*ContactListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedContactsServer) Save(context.Context, *ContactRequest) (*ContactReply, error) {
@@ -95,7 +95,7 @@ func RegisterContactsServer(s grpc.ServiceRegistrar, srv ContactsServer) {
 }
 
 func _Contacts_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContactRequest)
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func _Contacts_Get_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/protobuffer.Contacts/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContactsServer).Get(ctx, req.(*ContactRequest))
+		return srv.(ContactsServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

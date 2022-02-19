@@ -24,9 +24,9 @@ func NewContactGRPCHandler(logger *zap.Logger, s ContactService) *GRPCHandler {
 	}
 }
 
-func (g GRPCHandler) Get(ctx context.Context, _ *pb.ContactRequest) (*pb.ContactListReply, error) {
+func (g GRPCHandler) Get(ctx context.Context, _ *pb.GetRequest) (*pb.ContactListReply, error) {
 	contacts, err := g.service.Get(ctx)
-	var r *pb.ContactListReply
+	r := &pb.ContactListReply{}
 	for _, v := range contacts {
 		r.Contacts = append(r.Contacts, &pb.ContactReply{
 			Id:   v.ID.String(),
@@ -34,7 +34,7 @@ func (g GRPCHandler) Get(ctx context.Context, _ *pb.ContactRequest) (*pb.Contact
 		})
 	}
 	if err != nil {
-		return nil, fmt.Errorf("ports(contact-service): could not get all contacts %w", err)
+		return nil, fmt.Errorf("ports(contacts): could not get all contacts %w", err)
 	}
 	return r, nil
 }
@@ -46,7 +46,7 @@ func (g GRPCHandler) Save(ctx context.Context, newContactRequest *pb.ContactRequ
 	}
 	result, err := g.service.Save(ctx, newContact)
 	if err != nil {
-		return &pb.ContactReply{}, fmt.Errorf("ports(contact-service): could save new contact %w", err)
+		return &pb.ContactReply{}, fmt.Errorf("ports(contacts): could save new contact %w", err)
 	}
 	return &pb.ContactReply{Id: result.ID.String(), Name: result.Name}, nil
 }
@@ -54,7 +54,7 @@ func (g GRPCHandler) Save(ctx context.Context, newContactRequest *pb.ContactRequ
 func (g GRPCHandler) Find(ctx context.Context, id *pb.ContactId) (*pb.ContactReply, error) {
 	result, err := g.service.Find(ctx, id.GetId())
 	if err != nil {
-		return &pb.ContactReply{}, fmt.Errorf("ports(contact-service): could find contact %w", err)
+		return &pb.ContactReply{}, fmt.Errorf("ports(contact): could find contact %w", err)
 	}
 	return &pb.ContactReply{Id: result.ID.String(), Name: result.Name}, nil
 }

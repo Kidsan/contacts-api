@@ -20,7 +20,7 @@ package protobuffer;
 
 // The Contact service definition.
 service Contacts {
-  rpc Get (ContactId) returns (ContactListReply) {}
+  rpc Get (GetRequest) returns (ContactListReply) {}
   rpc Save(ContactRequest) returns (ContactReply) {}
   rpc Find(ContactId) returns (ContactReply) {}
 }
@@ -38,3 +38,4 @@ message ContactId {
 message ContactListReply {
   repeated ContactReply contacts = 1;
 }
+message GetRequest {}

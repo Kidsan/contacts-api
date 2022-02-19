@@ -37,6 +37,8 @@ func main() {
 	switch config.Server.Type {
 	case "http":
 		server = http.NewHTTPServer(config, logger, dbConnection)
+	case "grpc":
+		server = http.NewGRPCServer(config, logger, dbConnection)
 	default:
 		logger.Warn("No server type chosen, defaulting to http")
 		server = http.NewHTTPServer(config, logger, dbConnection)

@@ -9,7 +9,7 @@ type Config struct {
 
 type ServerConfig struct {
 	Port int    `mapstructure:"APPLICATION_PORT"`
-	Type string `mapstructire:"APPLICATION_LISTERNER_TYPE"`
+	Type string `mapstructure:"APPLICATION_LISTERNER_TYPE"`
 }
 
 type DatabaseConfig struct {

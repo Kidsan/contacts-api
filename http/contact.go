@@ -9,16 +9,18 @@ import (
 	pb "github.com/kidsan/contacts-api/protobuffer"
 )
 
-func (s *HTTPServer) BuildContactRouter() func(router chi.Router) {
-	contactRepository := adapters.NewContactRepository(s.connection)
+func (s *HTTPServer) buildContactRouter() func(router chi.Router) {
+	collector := adapters.NewAdapterCollector("contacts_api")
+	contactRepository := adapters.NewContactRepository(s.connection, collector)
 	contactService := domain.NewContactService(contactRepository)
 	contactHTTP := ports.NewContactRouter(s.logger, contactService)
 
 	return contactHTTP.Init()
 }
 
-func (g *GRPCServer) BuildContactServer() pb.ContactsServer {
-	contactRepository := adapters.NewContactRepository(g.connection)
+func (g *GRPCServer) buildContactServer() pb.ContactsServer {
+	collector := adapters.NewAdapterCollector("contacts_api")
+	contactRepository := adapters.NewContactRepository(g.connection, collector)
 	contactService := domain.NewContactService(contactRepository)
 	contactGRPC := ports.NewContactGRPCHandler(g.logger, contactService)
 

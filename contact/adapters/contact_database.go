@@ -3,6 +3,7 @@ package adapters
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	contactsapi "github.com/kidsan/contacts-api"
@@ -11,18 +12,22 @@ import (
 
 type ContactRepository struct {
 	connection *gorm.DB
+	collector  *Collector
 }
 
-func NewContactRepository(connection *gorm.DB) *ContactRepository {
-	return &ContactRepository{connection: connection}
+func NewContactRepository(connection *gorm.DB, collector *Collector) *ContactRepository {
+	return &ContactRepository{connection: connection, collector: collector}
 }
 
 func (c *ContactRepository) Get(ctx context.Context) ([]contactsapi.Contact, error) {
+	start := time.Now()
+	defer c.collector.DurationHistogram.WithLabelValues("contact_select").Observe(time.Since(start).Seconds())
 	result := make([]contactsapi.Contact, 0)
 	sqlQuery := "select * from contacts;"
 
 	tx := c.connection.WithContext(ctx).Raw(sqlQuery).Scan(&result)
 	if tx.Error != nil {
+		c.collector.ErrorCounter.WithLabelValues("contact_select").Inc()
 		return nil, fmt.Errorf("adapters: could not list all contacts: %w", tx.Error)
 	}
 

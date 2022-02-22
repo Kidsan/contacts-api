@@ -38,7 +38,8 @@ func NewHTTPServer(config contactsapi.Config, logger *zap.Logger, connection *go
 		router:     r,
 	}
 
-	s.router.Route("/api/contacts", s.BuildContactRouter())
+	s.router.Get("/metrics", s.handleMetrics())
+	s.router.Route("/api/contacts", s.buildContactRouter())
 	return s
 }
 
@@ -54,7 +55,7 @@ func NewGRPCServer(config contactsapi.Config, logger *zap.Logger, connection *go
 		connection: connection,
 		server:     grpc.NewServer(),
 	}
-	pb.RegisterContactsServer(grpcServer.server, grpcServer.BuildContactServer())
+	pb.RegisterContactsServer(grpcServer.server, grpcServer.buildContactServer())
 	return grpcServer
 }
 

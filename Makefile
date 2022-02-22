@@ -7,6 +7,9 @@ test:
 fmt:
 	@go fmt ./...
 
+vet:
+	@go vet ./...
+
 docker:
 	@docker build . -t kidsan/contacts-api:latest
 	@docker tag kidsan/contacts-api:latest kidsan/contacts-api:$(shell git rev-parse --short --verify main)

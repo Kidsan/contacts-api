@@ -30,17 +30,16 @@ type GRPCServer struct {
 }
 
 func NewHTTPServer(config contactsapi.Config, logger *zap.Logger, connection *gorm.DB) *HTTPServer {
-	r := chi.NewRouter()
-	s := &HTTPServer{
+	server := &HTTPServer{
 		config:     config.Server,
 		logger:     logger,
 		connection: connection,
-		router:     r,
+		router:     chi.NewRouter(),
 	}
 
-	s.router.Get("/metrics", s.handleMetrics())
-	s.router.Route("/api/contacts", s.buildContactRouter())
-	return s
+	server.router.Route("/metrics", server.buildMetricsRouter())
+	server.router.Route("/api/contacts", server.buildContactRouter())
+	return server
 }
 
 func (s *HTTPServer) Start() {

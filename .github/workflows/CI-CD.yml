@@ -1,0 +1,27 @@
+name: CI/CD
+
+on:
+  push:
+
+env:
+  SERVICE_NAME: contacts-api
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+
+      - name: Clean working directory
+        run: git checkout . && git clean -f
+
+      - name: Run Test
+        run: make test

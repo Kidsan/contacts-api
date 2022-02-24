@@ -31,14 +31,6 @@ func NewContactRouter(logger *zap.Logger, s ContactService) *ContactHTTP {
 	}
 }
 
-func (c *ContactHTTP) Init() func(router chi.Router) {
-	return func(router chi.Router) {
-		router.Get("/", c.GetAllHandler())
-		router.Post("/", c.PostHandler())
-		router.With(c.checkIDParam()).Get("/{id}", c.FindHandler())
-	}
-}
-
 func (c *ContactHTTP) GetAllHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		c.logger.Info("Listing all contacts")
@@ -113,7 +105,7 @@ func (c *ContactHTTP) FindHandler() http.HandlerFunc {
 	}
 }
 
-func (c *ContactHTTP) checkIDParam() func(next http.Handler) http.Handler {
+func (c *ContactHTTP) CheckIDParam() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			id := chi.URLParam(req, "id")

@@ -15,7 +15,11 @@ func (s *HTTPServer) buildContactRouter() func(router chi.Router) {
 	contactService := domain.NewContactService(contactRepository)
 	contactHTTP := ports.NewContactRouter(s.logger, contactService)
 
-	return contactHTTP.Init()
+	return func(router chi.Router) {
+		router.Get("/", contactHTTP.GetAllHandler())
+		router.Post("/", contactHTTP.PostHandler())
+		router.With(contactHTTP.CheckIDParam()).Get("/{id}", contactHTTP.FindHandler())
+	}
 }
 
 func (g *GRPCServer) buildContactServer() pb.ContactsServer {
